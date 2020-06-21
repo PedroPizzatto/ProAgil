@@ -1,0 +1,10 @@
+
+> fibers@5.0.0 install C:\Users\pedro\Projetos2020\DotNetCore\ProAgil-App\node_modules\fibers
+> node build.js || nodejs build.js
+
+`win32-x64-72` exists; testing
+Binary is fine; exiting
+pro-agil-app@0.0.0 C:\Users\pedro\Projetos2020\DotNetCore\ProAgil-App
+`-- fibers@5.0.0 
+  `-- detect-libc@1.0.3 
+
