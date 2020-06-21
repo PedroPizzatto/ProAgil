@@ -1597,7 +1597,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "ngOnInit",
         value: function ngOnInit() {
           if (localStorage.getItem('token') !== null) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/Dashboard']);
           }
         }
       }, {
@@ -1606,13 +1606,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var _this5 = this;
 
           this.authService.login(this.model).subscribe(function () {
-            _this5.router.navigate(['/dashboard']);
+            _this5.router.navigate(['/Dashboard']);
           }, function (error) {
-            if (error.status === 404) {
-              _this5.toastrService.error(error.error);
-            } else {
-              _this5.toastrService.error('Ocorre uma falha ao tentar efetuar o login!');
-            }
+            // if (error.status === 404) {
+            //   this.toastrService.error(error.error);
+            // } else {
+            _this5.toastrService.error('Ocorre uma falha ao tentar efetuar o login!'); // }
+
           });
         }
       }]);
@@ -1693,7 +1693,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](17, "button", 12);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function LoginComponent_Template_button_click_17_listener() {
-            return ctx.router.navigate(["/user/registration"]);
+            return ctx.router.navigate(["/User/Registration"]);
           });
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](18, "Quero me cadastrar");
@@ -2446,7 +2446,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         _classCallCheck(this, AuthService);
 
         this.httpClient = httpClient;
-        this.baseUrl = 'https://localhost:5001/api/user';
+        this.baseUrl = 'http://localhost:5000/api/user';
         this.jwtHelper = new _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_1__["JwtHelperService"]();
       }
 
@@ -2784,29 +2784,38 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _User_Registration_Registration_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
     /*! ./User/Registration/Registration.component */
     "./src/app/User/Registration/Registration.component.ts");
+    /* harmony import */
+
+
+    var _auth_auth_guard__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
+    /*! ./auth/auth.guard */
+    "./src/app/auth/auth.guard.ts");
 
     var routes = [{
       path: 'User',
-      component: _User_User_component__WEBPACK_IMPORTED_MODULE_6__["UserComponent"],
-      children: [{
-        path: 'Login',
-        component: _User_Login_Login_component__WEBPACK_IMPORTED_MODULE_7__["LoginComponent"]
-      }, {
-        path: 'Registration',
-        component: _User_Registration_Registration_component__WEBPACK_IMPORTED_MODULE_8__["RegistrationComponent"]
-      }]
+      component: _User_User_component__WEBPACK_IMPORTED_MODULE_6__["UserComponent"]
+    }, {
+      path: 'User/Login',
+      component: _User_Login_Login_component__WEBPACK_IMPORTED_MODULE_7__["LoginComponent"]
+    }, {
+      path: 'User/Registration',
+      component: _User_Registration_Registration_component__WEBPACK_IMPORTED_MODULE_8__["RegistrationComponent"]
     }, {
       path: 'Eventos',
-      component: _Eventos_Eventos_component__WEBPACK_IMPORTED_MODULE_2__["EventosComponent"]
+      component: _Eventos_Eventos_component__WEBPACK_IMPORTED_MODULE_2__["EventosComponent"],
+      canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_9__["AuthGuard"]]
     }, {
       path: 'Palestrantes',
-      component: _Palestrantes_Palestrantes_component__WEBPACK_IMPORTED_MODULE_3__["PalestrantesComponent"]
+      component: _Palestrantes_Palestrantes_component__WEBPACK_IMPORTED_MODULE_3__["PalestrantesComponent"],
+      canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_9__["AuthGuard"]]
     }, {
       path: 'Dashboard',
-      component: _Dashboard_Dashboard_component__WEBPACK_IMPORTED_MODULE_4__["DashboardComponent"]
+      component: _Dashboard_Dashboard_component__WEBPACK_IMPORTED_MODULE_4__["DashboardComponent"],
+      canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_9__["AuthGuard"]]
     }, {
       path: 'Contatos',
-      component: _Contatos_Contatos_component__WEBPACK_IMPORTED_MODULE_5__["ContatosComponent"]
+      component: _Contatos_Contatos_component__WEBPACK_IMPORTED_MODULE_5__["ContatosComponent"],
+      canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_9__["AuthGuard"]]
     }, {
       path: '',
       redirectTo: 'Dashboard',
@@ -3097,6 +3106,18 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _helpers_DateFormat_pipe__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(
     /*! ./_helpers/DateFormat.pipe */
     "./src/app/_helpers/DateFormat.pipe.ts");
+    /* harmony import */
+
+
+    var _services_Evento_service__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(
+    /*! ./_services/Evento.service */
+    "./src/app/_services/Evento.service.ts");
+    /* harmony import */
+
+
+    var _auth_auth_interceptor__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(
+    /*! ./auth/auth.interceptor */
+    "./src/app/auth/auth.interceptor.ts");
 
     var AppModule = function AppModule() {
       _classCallCheck(this, AppModule);
@@ -3110,7 +3131,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       factory: function AppModule_Factory(t) {
         return new (t || AppModule)();
       },
-      providers: [],
+      providers: [_services_Evento_service__WEBPACK_IMPORTED_MODULE_22__["EventoService"], {
+        provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
+        useClass: _auth_auth_interceptor__WEBPACK_IMPORTED_MODULE_23__["AuthInterceptor"],
+        multi: true
+      }],
       imports: [[_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_5__["BsDropdownModule"].forRoot(), ngx_bootstrap_tooltip__WEBPACK_IMPORTED_MODULE_6__["TooltipModule"].forRoot(), ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["ModalModule"].forRoot(), ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_7__["BsDatepickerModule"].forRoot(), _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_9__["BrowserAnimationsModule"], ngx_toastr__WEBPACK_IMPORTED_MODULE_10__["ToastrModule"].forRoot(), ngx_bootstrap_tooltip__WEBPACK_IMPORTED_MODULE_6__["TooltipModule"].forRoot(), _app_routing_module__WEBPACK_IMPORTED_MODULE_8__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"]]]
     });
 
@@ -3129,10 +3154,197 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         args: [{
           declarations: [_app_component__WEBPACK_IMPORTED_MODULE_11__["AppComponent"], _Eventos_Eventos_component__WEBPACK_IMPORTED_MODULE_12__["EventosComponent"], _nav_nav_component__WEBPACK_IMPORTED_MODULE_16__["NavComponent"], _Palestrantes_Palestrantes_component__WEBPACK_IMPORTED_MODULE_13__["PalestrantesComponent"], _Contatos_Contatos_component__WEBPACK_IMPORTED_MODULE_14__["ContatosComponent"], _Dashboard_Dashboard_component__WEBPACK_IMPORTED_MODULE_15__["DashboardComponent"], _shared_Titulo_Titulo_component__WEBPACK_IMPORTED_MODULE_17__["TituloComponent"], _User_User_component__WEBPACK_IMPORTED_MODULE_18__["UserComponent"], _User_Login_Login_component__WEBPACK_IMPORTED_MODULE_19__["LoginComponent"], _User_Registration_Registration_component__WEBPACK_IMPORTED_MODULE_20__["RegistrationComponent"], _helpers_DateFormat_pipe__WEBPACK_IMPORTED_MODULE_21__["DateFormatPipe"]],
           imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_5__["BsDropdownModule"].forRoot(), ngx_bootstrap_tooltip__WEBPACK_IMPORTED_MODULE_6__["TooltipModule"].forRoot(), ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_4__["ModalModule"].forRoot(), ngx_bootstrap_datepicker__WEBPACK_IMPORTED_MODULE_7__["BsDatepickerModule"].forRoot(), _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_9__["BrowserAnimationsModule"], ngx_toastr__WEBPACK_IMPORTED_MODULE_10__["ToastrModule"].forRoot(), ngx_bootstrap_tooltip__WEBPACK_IMPORTED_MODULE_6__["TooltipModule"].forRoot(), _app_routing_module__WEBPACK_IMPORTED_MODULE_8__["AppRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"]],
-          providers: [],
+          providers: [_services_Evento_service__WEBPACK_IMPORTED_MODULE_22__["EventoService"], {
+            provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
+            useClass: _auth_auth_interceptor__WEBPACK_IMPORTED_MODULE_23__["AuthInterceptor"],
+            multi: true
+          }],
           bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_11__["AppComponent"]]
         }]
       }], null, null);
+    })();
+    /***/
+
+  },
+
+  /***/
+  "./src/app/auth/auth.guard.ts":
+  /*!************************************!*\
+    !*** ./src/app/auth/auth.guard.ts ***!
+    \************************************/
+
+  /*! exports provided: AuthGuard */
+
+  /***/
+  function srcAppAuthAuthGuardTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "AuthGuard", function () {
+      return AuthGuard;
+    });
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/router */
+    "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
+
+    var AuthGuard = /*#__PURE__*/function () {
+      // wtHelper = new JwtHelperService();
+      function AuthGuard(routes) {
+        _classCallCheck(this, AuthGuard);
+
+        this.routes = routes;
+      }
+
+      _createClass(AuthGuard, [{
+        key: "canActivate",
+        value: function canActivate(next, state) {
+          var token = localStorage.getItem('token'); // if ((token !== null) && (!this.jwtHelper.isTokenExpired(token))) {
+
+          if (localStorage.getItem('token') !== null) {
+            return true;
+          } else {
+            this.routes.navigate(['/User/Login']);
+            return false;
+          }
+        }
+      }]);
+
+      return AuthGuard;
+    }();
+
+    AuthGuard.ɵfac = function AuthGuard_Factory(t) {
+      return new (t || AuthGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]));
+    };
+
+    AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
+      token: AuthGuard,
+      factory: AuthGuard.ɵfac,
+      providedIn: 'root'
+    });
+    /*@__PURE__*/
+
+    (function () {
+      _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthGuard, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+        args: [{
+          providedIn: 'root'
+        }]
+      }], function () {
+        return [{
+          type: _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]
+        }];
+      }, null);
+    })();
+    /***/
+
+  },
+
+  /***/
+  "./src/app/auth/auth.interceptor.ts":
+  /*!******************************************!*\
+    !*** ./src/app/auth/auth.interceptor.ts ***!
+    \******************************************/
+
+  /*! exports provided: AuthInterceptor */
+
+  /***/
+  function srcAppAuthAuthInterceptorTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "AuthInterceptor", function () {
+      return AuthInterceptor;
+    });
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+    /* harmony import */
+
+
+    var rxjs_internal_operators_tap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! rxjs/internal/operators/tap */
+    "./node_modules/rxjs/internal/operators/tap.js");
+    /* harmony import */
+
+
+    var rxjs_internal_operators_tap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(rxjs_internal_operators_tap__WEBPACK_IMPORTED_MODULE_1__);
+    /* harmony import */
+
+
+    var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @angular/router */
+    "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
+
+    var AuthInterceptor = /*#__PURE__*/function () {
+      function AuthInterceptor(router) {
+        _classCallCheck(this, AuthInterceptor);
+
+        this.router = router;
+      }
+
+      _createClass(AuthInterceptor, [{
+        key: "intercept",
+        value: function intercept(req, next) {
+          var _this8 = this;
+
+          if (localStorage.getItem('token') !== null) {
+            var reqClone = req.clone({
+              headers: req.headers.set('Authorization', "Bearer ".concat(localStorage.getItem('token')))
+            });
+            return next.handle(reqClone).pipe(Object(rxjs_internal_operators_tap__WEBPACK_IMPORTED_MODULE_1__["tap"])(function (sucess) {}, function (error) {
+              if (error.status === 401) {
+                _this8.router.navigateByUrl('/User/Login');
+              }
+            }));
+          } else {
+            return next.handle(req.clone());
+          }
+        }
+      }]);
+
+      return AuthInterceptor;
+    }();
+
+    AuthInterceptor.ɵfac = function AuthInterceptor_Factory(t) {
+      return new (t || AuthInterceptor)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]));
+    };
+
+    AuthInterceptor.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({
+      token: AuthInterceptor,
+      factory: AuthInterceptor.ɵfac,
+      providedIn: 'root'
+    });
+    /*@__PURE__*/
+
+    (function () {
+      _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthInterceptor, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+        args: [{
+          providedIn: 'root'
+        }]
+      }], function () {
+        return [{
+          type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]
+        }];
+      }, null);
     })();
     /***/
 
@@ -3172,25 +3384,31 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony import */
 
 
-    var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    var _services_Auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ../_services/Auth.service */
+    "./src/app/_services/Auth.service.ts");
+    /* harmony import */
+
+
+    var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
     /*! @angular/common */
     "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/common.js");
     /* harmony import */
 
 
-    var ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    var ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
     /*! ngx-bootstrap/dropdown */
     "./node_modules/ngx-bootstrap/__ivy_ngcc__/dropdown/fesm2015/ngx-bootstrap-dropdown.js");
 
     function NavComponent_div_6_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 8);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "ul", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "ul", 9);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "li", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "li", 10);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "a", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "a", 11);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "Eventos");
 
@@ -3198,9 +3416,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "li", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "li", 10);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "a", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "a", 12);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](7, "Palestrantes");
 
@@ -3208,9 +3426,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "li", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "li", 10);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "a", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "a", 13);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10, "Contatos");
 
@@ -3226,17 +3444,27 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     function NavComponent_ul_7_div_4_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 17);
+        var _r5 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "a", 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 18);
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "a", 19);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, " Perfil ");
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](3, "div", 19);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](3, "div", 20);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "a", 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "a", 21);
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function NavComponent_ul_7_div_4_Template_a_click_4_listener() {
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r5);
+
+          var ctx_r4 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2);
+
+          return ctx_r4.logout();
+        });
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, " Sair ");
 
@@ -3248,27 +3476,58 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     function NavComponent_ul_7_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "ul", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "ul", 14);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "li", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "li", 15);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "a", 15);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "a", 16);
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](3, " Pedro ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](3);
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](4, NavComponent_ul_7_div_4_Template, 6, 0, "div", 17);
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](4, NavComponent_ul_7_div_4_Template, 6, 0, "div", 16);
-
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+      }
+
+      if (rf & 2) {
+        var ctx_r1 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](3);
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", ctx_r1.authService.decodedToken == null ? null : ctx_r1.authService.decodedToken.unique_name, " ");
+      }
+    }
+
+    function NavComponent_button_8_Template(rf, ctx) {
+      if (rf & 1) {
+        var _r7 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "button", 22);
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function NavComponent_button_8_Template_button_click_0_listener() {
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r7);
+
+          var ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
+
+          return ctx_r6.entrar();
+        });
+
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1, "Entrar");
 
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
       }
     }
 
     var NavComponent = /*#__PURE__*/function () {
-      function NavComponent() {
+      function NavComponent(route, authService) {
         _classCallCheck(this, NavComponent);
+
+        this.route = route;
+        this.authService = authService;
       }
 
       _createClass(NavComponent, [{
@@ -3277,7 +3536,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "loggedIn",
         value: function loggedIn() {
-          return false;
+          return this.authService.loggedIn();
+        }
+      }, {
+        key: "entrar",
+        value: function entrar() {
+          this.route.navigate(['/User/Login']);
+        } // getUserName() {
+        //   return sessionStorage.getItem('username');
+        // }
+
+      }, {
+        key: "logout",
+        value: function logout() {
+          localStorage.removeItem('token');
+          this.route.navigate(['/User/Login']);
         }
       }]);
 
@@ -3285,15 +3558,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }();
 
     NavComponent.ɵfac = function NavComponent_Factory(t) {
-      return new (t || NavComponent)();
+      return new (t || NavComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_services_Auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]));
     };
 
     NavComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({
       type: NavComponent,
       selectors: [["app-nav"]],
-      decls: 8,
-      vars: 2,
-      consts: [[1, "navbar", "navbar-expand-md", "navbar-dark", "bg-dark"], [1, "container"], ["routerLink", "Dashboard", 1, "navbar-brand"], ["type", "button", "data-toggle", "collapse", "data-target", "#navbarsExampleDefault", "aria-controls", "navbarsExampleDefault", "aria-expanded", "false", "aria-label", "Toggle navigation", 1, "navbar-toggler"], [1, "navbar-toggler-icon"], ["class", "collapse navbar-collapse", "id", "navbarsExampleDefault", 4, "ngIf"], ["class", "navbar-nav", 4, "ngIf"], ["id", "navbarsExampleDefault", 1, "collapse", "navbar-collapse"], [1, "navbar-nav", "mr-auto"], ["routerLinkActive", "active", 1, "nav-item"], ["routerLink", "Eventos", 1, "nav-link"], ["routerLink", "Palestrantes", 1, "nav-link"], ["routerLink", "Contatos", 1, "nav-link"], [1, "navbar-nav"], ["dropdown", "", 1, "nav-item", "dropdown"], ["dropdownToggle", "", "href", "#", "id", "navbarDropdownMenuLink", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "nav-link", "dropdown-toggle"], ["class", "dropdown-menu", "aria-labelledby", "navbarDropdownMenuLink", 4, "dropdownMenu"], ["aria-labelledby", "navbarDropdownMenuLink", 1, "dropdown-menu"], ["href", "#", 1, "dropdown-item"], ["role", "separator", 1, "divider"]],
+      decls: 9,
+      vars: 3,
+      consts: [[1, "navbar", "navbar-expand-md", "navbar-dark", "bg-dark"], [1, "container"], ["routerLink", "Dashboard", 1, "navbar-brand"], ["type", "button", "data-toggle", "collapse", "data-target", "#navbarsExampleDefault", "aria-controls", "navbarsExampleDefault", "aria-expanded", "false", "aria-label", "Toggle navigation", 1, "navbar-toggler"], [1, "navbar-toggler-icon"], ["class", "collapse navbar-collapse", "id", "navbarsExampleDefault", 4, "ngIf"], ["class", "navbar-nav", 4, "ngIf"], ["class", "btn btn-success", 3, "click", 4, "ngIf"], ["id", "navbarsExampleDefault", 1, "collapse", "navbar-collapse"], [1, "navbar-nav", "mr-auto"], ["routerLinkActive", "active", 1, "nav-item"], ["routerLink", "Eventos", 1, "nav-link"], ["routerLink", "Palestrantes", 1, "nav-link"], ["routerLink", "Contatos", 1, "nav-link"], [1, "navbar-nav"], ["dropdown", "", 1, "nav-item", "dropdown"], ["dropdownToggle", "", "id", "navbarDropdownMenuLink", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "nav-link", "dropdown-toggle", 2, "cursor", "pointer"], ["class", "dropdown-menu", "aria-labelledby", "navbarDropdownMenuLink", 4, "dropdownMenu"], ["aria-labelledby", "navbarDropdownMenuLink", 1, "dropdown-menu"], [1, "dropdown-item"], ["role", "separator", 1, "divider"], [1, "dropdown-item", 2, "cursor", "pointer", 3, "click"], [1, "btn", "btn-success", 3, "click"]],
       template: function NavComponent_Template(rf, ctx) {
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "nav", 0);
@@ -3314,7 +3587,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](6, NavComponent_div_6_Template, 11, 0, "div", 5);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](7, NavComponent_ul_7_Template, 5, 0, "ul", 6);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](7, NavComponent_ul_7_Template, 5, 1, "ul", 6);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](8, NavComponent_button_8_Template, 2, 0, "button", 7);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -3329,9 +3604,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.loggedIn());
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", !ctx.loggedIn());
         }
       },
-      directives: [_angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterLinkWithHref"], _angular_common__WEBPACK_IMPORTED_MODULE_2__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterLinkActive"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_3__["BsDropdownDirective"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_3__["BsDropdownToggleDirective"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_3__["BsDropdownMenuDirective"]],
+      directives: [_angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterLinkWithHref"], _angular_common__WEBPACK_IMPORTED_MODULE_3__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_1__["RouterLinkActive"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_4__["BsDropdownDirective"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_4__["BsDropdownToggleDirective"], ngx_bootstrap_dropdown__WEBPACK_IMPORTED_MODULE_4__["BsDropdownMenuDirective"]],
       styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL25hdi9uYXYuY29tcG9uZW50LmNzcyJ9 */"]
     });
     /*@__PURE__*/
@@ -3345,7 +3624,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           styleUrls: ['./nav.component.css']
         }]
       }], function () {
-        return [];
+        return [{
+          type: _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]
+        }, {
+          type: _services_Auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]
+        }];
       }, null);
     })();
     /***/
@@ -3450,7 +3733,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   /***/
   function _(module, exports, __webpack_require__) {
     module.exports = __webpack_require__(
-    /*! C:\Users\pedro\Projetos2020\DotNetCore\ProAgil-App\src\main.ts */
+    /*! C:\Users\pedro\ProjetosPedro\ProAgil\ProAgil-App\src\main.ts */
     "./src/main.ts");
     /***/
   }
