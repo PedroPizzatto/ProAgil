@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-
 export class AuthService {
 
   baseUrl = 'http://localhost:5000/api/user';
@@ -22,17 +21,17 @@ export class AuthService {
           if (user) {
             localStorage.setItem('token', user.token);
             this.decodedToken = this.jwtHelper.decodeToken(user.token);
-            // sessionStorage.setItem('username', this.decodedToken.unique_name);
+            sessionStorage.setItem('username', this.decodedToken.unique_name);
           }
         })
       );
   }
 
-  register(model: any){
+  register(model: any) {
     return this.httpClient.post(`${this.baseUrl}/register`, model);
   }
 
-  loggedIn(){
+  loggedIn() {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }

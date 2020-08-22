@@ -1,7 +1,7 @@
 import { RedeSocial } from './RedeSocial';
 import { Evento } from './Evento';
 
-export class Palestrante {
+export interface Palestrante {
     id: number;
     nome: string;
     miniCurriculo: string;
@@ -9,5 +9,5 @@ export class Palestrante {
     telefone: string;
     email: string;
     redesSociais: RedeSocial[];
-    palestrantesEventos: Evento[];
+    palestrantesEventos: Evento[];    
 }

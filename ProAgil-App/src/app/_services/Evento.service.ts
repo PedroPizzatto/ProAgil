@@ -7,40 +7,39 @@ import { Evento } from '../_models/Evento';
   providedIn: 'root'
 })
 export class EventoService {
-  baseURL = 'http://localhost:5000/api/evento';
 
-  constructor(private http: HttpClient) {
-   }
+  urlBase = 'http://localhost:5000/api/evento';
 
-  getAllEvento(): Observable<Evento[]>{
-    return this.http.get<Evento[]>(this.baseURL);
+  constructor(private http: HttpClient) {}
+
+  getAllEvento(): Observable<Evento[]>  {
+    return this.http.get<Evento[]>(this.urlBase);
   }
 
-  getEventoByTema(tema: string): Observable<Evento[]>{
-    return this.http.get<Evento[]>(`${this.baseURL}/getByTema/${tema}`);
+  getByIdEvento(id: number): Observable<Evento> {
+    return this.http.get<Evento>(`${this.urlBase}/${id}`);
   }
 
-  getEventoById(id: number): Observable<Evento>{
-    return this.http.get<Evento>(`${this.baseURL}/getByTema/${id}`);
+  getByTemaEvento(tema: string): Observable<Evento[]> {
+    return this.http.get<Evento[]>(`${this.urlBase}/getByTema/${tema}`);
   }
 
   postEvento(evento: Evento) {
-    return this.http.post(this.baseURL, evento);
+    return this.http.post(this.urlBase, evento);
   }
 
   putEvento(evento: Evento) {
-    return this.http.put(`${this.baseURL}/${evento.id}`, evento);
+    return this.http.put(`${this.urlBase}/${evento.id}`, evento);
   }
 
   deleteEvento(id: number) {
-    return this.http.delete(`${this.baseURL}/${id}`);
+    return this.http.delete(`${this.urlBase}/${id}`);
   }
 
   postUpload(file: File, name: string) {
     const fileToUpload = file[0] as File;
     const formData = new FormData();
     formData.append('file', fileToUpload, `${name}`);
-    return this.http.post(`${this.baseURL}/uploadImage`, formData);
+    return this.http.post(`${this.urlBase}/uploadImage`, formData);
   }
-
 }

@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-Palestrantes',
-  templateUrl: './Palestrantes.component.html',
-  styleUrls: ['./Palestrantes.component.css']
+  selector: 'app-palestrantes',
+  templateUrl: './palestrantes.component.html',
+  styleUrls: ['./palestrantes.component.css']
 })
 export class PalestrantesComponent implements OnInit {
-
   titulo = 'Palestrantes';
-
   constructor() { }
 
   ngOnInit() {

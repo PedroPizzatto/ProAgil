@@ -1,4 +1,4 @@
-<app-Titulo [titulo]="titulo"></app-Titulo>
+<app-titulo [titulo]="titulo"></app-titulo>
 <div class="d-flex">
   <div class="form-inline mr-auto">
     <div class="form-group mb-2">
@@ -30,7 +30,7 @@
     <th>Data</th>
     <th>Qtde Pessoas</th>
     <th>Lote</th>
-    <th colspan="2">Opções</th>
+    <th colspan="2" class="text-center">Opções</th>
   </tr>
 </thead>
 <tbody *ngIf="eventos">
@@ -62,6 +62,11 @@
             <i class="fa fa-eraser"></i>
           </button>
         </div>
+      </td>
+      <td>
+        <a [routerLink]="['/evento', evento.id, 'edit']" tooltip="Edição detalhada" class="btn btn-sm btn-warning">
+          <i class="fa fa-edit"></i>
+        </a>
       </td>
     </tr>
   </tbody>

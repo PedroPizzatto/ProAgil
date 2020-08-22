@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -127,6 +128,18 @@ namespace ProAgil.WebAPI.Controllers
                 var evento = await _repository.GetAllEventosAsyncById(EventoId, false);
                 if (evento == null) return NotFound();
 
+                var idLotes = new List<int>();
+                var idRedes = new List<int>();
+
+                model.Lotes.ForEach(lote => idLotes.Add(lote.Id));
+                model.RedesSociais.ForEach(rede => idRedes.Add(rede.Id));
+                
+                var lotes = evento.Lotes.Where(lote => !idLotes.Contains(lote.Id)).ToArray();
+                var redesSociais = evento.RedesSociais.Where(rede => !idRedes.Contains(rede.Id)).ToArray();
+
+                if (lotes.Length > 0) _repository.DeleteRange(lotes);
+                if (redesSociais.Length > 0) _repository.DeleteRange(redesSociais);
+
                 _mapper.Map(model, evento);
 
                 _repository.Update(evento);
@@ -136,9 +149,9 @@ namespace ProAgil.WebAPI.Controllers
                     return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(model));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
             return BadRequest();

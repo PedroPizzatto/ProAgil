@@ -1,10 +1,9 @@
-
-export class Lote {
+export interface Lote {
     id: number;
-    nome: string;
-    preco: number;
-    dataInicio?: Date;
-    dataFim?: Date;
+    nome: string; 
+    preco: number; 
+    dataInicial?: Date; 
+    dataFinal?: Date;
     quantidade: number;
     eventoId: number;
 }

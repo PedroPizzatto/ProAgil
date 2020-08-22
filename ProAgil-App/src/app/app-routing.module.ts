@@ -1,34 +1,33 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EventosComponent } from './Eventos/Eventos.component';
-import { PalestrantesComponent } from './Palestrantes/Palestrantes.component';
-import { DashboardComponent } from './Dashboard/Dashboard.component';
-import { ContatosComponent } from './Contatos/Contatos.component';
-import { UserComponent } from './User/User.component';
-import { LoginComponent } from './User/Login/Login.component';
-import { RegistrationComponent } from './User/Registration/Registration.component';
+import { EventosComponent } from './eventos/eventos.component';
+import { PalestrantesComponent } from './palestrantes/palestrantes.component';
+import { ContatosComponent } from './contatos/contatos.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UserComponent } from './user/user.component';
+import { LoginComponent } from './user/login/login.component';
+import { RegistrationComponent } from './user/registration/registration.component';
 import { AuthGuard } from './auth/auth.guard';
+import { EventoEditComponent } from './eventos/eventoEdit/eventoEdit.component';
 
 const routes: Routes = [
-   { path: 'User', component: UserComponent },
-   { path: 'User/Login', component: LoginComponent },
-   { path: 'User/Registration', component: RegistrationComponent },
-   { path: 'Eventos', component: EventosComponent, canActivate: [AuthGuard]},
-   { path: 'Palestrantes', component: PalestrantesComponent, canActivate: [AuthGuard]},
-   { path: 'Dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
-   { path: 'Contatos', component: ContatosComponent, canActivate: [AuthGuard]},
-   { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
-   { path: '**', redirectTo: 'Dashboard', pathMatch: 'full' },
+  {path: 'user', component: UserComponent,
+   children: [
+     {path: 'login', component: LoginComponent},
+     {path: 'registration', component: RegistrationComponent}
+   ]
+  },
+  {path: 'eventos' , component: EventosComponent, canActivate: [AuthGuard]},
+  {path: 'evento/:id/edit' , component: EventoEditComponent, canActivate: [AuthGuard]},
+  {path: 'palestrantes', component: PalestrantesComponent, canActivate: [AuthGuard]},
+  {path: 'contatos', component: ContatosComponent, canActivate: [AuthGuard]},
+  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}
 ];
 
 @NgModule({
-   imports: [
-      RouterModule.forRoot(routes)
-   ],
-   exports: [
-      RouterModule
-   ],
-   declarations: [
-   ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

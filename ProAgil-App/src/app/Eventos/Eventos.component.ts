@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { EventoService } from '../_services/Evento.service';
+import { EventoService } from '../_services/evento.service';
 import { Evento } from '../_models/Evento';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -10,10 +10,9 @@ import { ToastrService } from 'ngx-toastr';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'app-Eventos',
-  templateUrl: './Eventos.component.html',
-  styleUrls: ['./Eventos.component.css']
+  selector: 'app-eventos',
+  templateUrl: './eventos.component.html',
+  styleUrls: ['./eventos.component.css']
 })
 
 export class EventosComponent implements OnInit {
@@ -34,7 +33,7 @@ export class EventosComponent implements OnInit {
   file: File;
   dataAtual: string;
   bodyDeletarEvento = '';
-  fileNameUpdate: string;
+  fileNameToUpdate: string;
 
   constructor(private eventoService: EventoService,
               private formBuilder: FormBuilder,
@@ -77,6 +76,7 @@ export class EventosComponent implements OnInit {
   }
 
   getEventos() {
+    this.dataAtual = new Date().getMilliseconds().toString();
     this.eventoService.getAllEvento().subscribe(
       (events: Evento[]) => {
         this.eventos = events;
@@ -102,19 +102,19 @@ export class EventosComponent implements OnInit {
           this.getEventos();
         }
       );
-    }
-    else {
-      this.evento.imagemURL = this.fileNameUpdate;
-      this.eventoService.postUpload(this.file, this.fileNameUpdate).subscribe(() => {
-        this.dataAtual = new Date().getMilliseconds().toString();
-        this.getEventos();
-      }
-    );
+    } else {
+      this.evento.imagemURL = this.fileNameToUpdate;
+      this.eventoService.postUpload(this.file, this.fileNameToUpdate).subscribe(
+        () => {
+          this.dataAtual = new Date().getMilliseconds().toString();
+          this.getEventos();
+        }
+      );
     }
   }
 
   salvarAlteracao(template: any) {
-    if (this.registerForm.valid){
+    if (this.registerForm.valid) {
 
       if (this.modoSalvar === 'put') {
         this.evento = Object.assign({id: this.evento.id}, this.registerForm.value);
@@ -157,7 +157,7 @@ export class EventosComponent implements OnInit {
     this.modoSalvar = 'put';
     this.openModal(template);
     this.evento = Object.assign({}, evento);
-    this.fileNameUpdate = evento.imagemURL.toString();
+    this.fileNameToUpdate = evento.imagemURL.toString();
     this.evento.imagemURL = '';
     this.registerForm.patchValue(this.evento);
   }

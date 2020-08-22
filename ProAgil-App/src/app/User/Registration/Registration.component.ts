@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../_models/User';
-import { AuthService } from 'src/app/_services/Auth.service';
+import { AuthService } from 'src/app/_services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'app-Registration',
-  templateUrl: './Registration.component.html',
-  styleUrls: ['./Registration.component.css']
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit {
 
@@ -17,8 +16,8 @@ export class RegistrationComponent implements OnInit {
   user: User;
 
   constructor(public formBuilder: FormBuilder,
-              private toastService: ToastrService,
-              private authService: AuthService,
+              public toastService: ToastrService,
+              public authService: AuthService,
               public route: Router) { }
 
   ngOnInit() {
@@ -33,7 +32,7 @@ export class RegistrationComponent implements OnInit {
       passwords : this.formBuilder.group({
         password : ['', [Validators.required, Validators.minLength(4)]],
         confirmPassword : ['', Validators.required]
-      }, { validator: this.compararSenhas })
+      }, {validator: this.compararSenhas})
     });
   }
 
@@ -49,7 +48,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   cadastrarUsuario() {
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid){
       this.user = Object.assign({
         password: this.registerForm.get('passwords.password').value,
         fullName: this.registerForm.get('fullName').value,
@@ -60,21 +59,21 @@ export class RegistrationComponent implements OnInit {
         .subscribe(
           () => {
             this.toastService.success('Cadastro realizado!');
-            this.route.navigate(['User/Login']);
+            this.route.navigate(['user/login']);
           }, error => {
             const errors = error.error;
             errors.forEach(element => {
-              switch (element.code) {
-                case 'DuplicateUserName':
-                  this.toastService.error('Já existi um usuário cadastro com esse mesmo nome!');
-                  break;
-                default:
+              if (element.code){
+                if (element.code == "DuplicateUserName"){
+                  this.toastService.error('Já existi um usuário cadastro com esse mesmo nome!')
+                } else {
                   this.toastService.error(`Ocorre um erro ao tentar cadastrar, Code:${element.code}`);
-                  break;
+                }
               }
             });
           }
         );
     }
   }
+
 }

@@ -4,11 +4,9 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/internal/operators/tap';
 import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
-
 export class AuthInterceptor implements HttpInterceptor {
 
     constructor(private router: Router) {}
-
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (localStorage.getItem('token') !== null) {
             const reqClone = req.clone({
@@ -19,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     sucess => {},
                     error => {
                         if (error.status === 401) {
-                            this.router.navigateByUrl('/User/Login');
+                            this.router.navigateByUrl('/user/login');
                         }
                     }
                 )
@@ -28,5 +26,4 @@ export class AuthInterceptor implements HttpInterceptor {
             return next.handle(req.clone());
         }
     }
-
 }

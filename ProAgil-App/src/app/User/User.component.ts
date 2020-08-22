@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-User',
-  templateUrl: './User.component.html',
-  styleUrls: ['./User.component.css']
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
 
