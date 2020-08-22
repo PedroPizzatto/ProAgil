@@ -34,7 +34,7 @@ export class NavComponent implements OnInit {
     this.route.navigate(['/user/login']);
   }
 
-  isLogginPage() {
+  showMenu() {
     return this.route.url === '/user/login';
   }
 
